@@ -1,0 +1,39 @@
+# Ignore Python virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# Ignore Poetry virtual environment
+.poetry/
+__pypackages__/
+
+# Ignore generated files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Ignore local development settings
+.local/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.iml
+
+# Ignore package build artifacts
+dist/
+build/
+*.egg-info/
+
+# Ignore Poetry lock file
+poetry.lock
+
+# Ignore sensitive or personal files
+secrets.json
+credentials.json
