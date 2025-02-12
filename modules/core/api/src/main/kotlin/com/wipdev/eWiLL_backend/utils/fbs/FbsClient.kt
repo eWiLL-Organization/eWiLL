@@ -10,11 +10,14 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.nio.charset.StandardCharsets
 import javax.servlet.http.HttpServletRequest
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-
-class FbsClient {
-
-    private val baseUrl = "https://feedback.mni.thm.de/api/v1"
+@Component
+class FbsClient{
+    @Value("\${app.fbs.url}")
+    private var baseUrl: String = "https://feedback.mni.thm.de/api/v1"
 
     fun getLoginLdap(username: String, password: String, servletRequest: HttpServletRequest): HttpResponse<String>? {
         val url = "$baseUrl/login/ldap"

@@ -43,6 +43,9 @@ class AuthController {
     @Autowired
     lateinit var jwtUtils: JwtUtils
 
+    @Autowired
+    lateinit var fbsClient: FbsClient
+
 
     @PostMapping("/signin")
     @Description("Sign in with username and password")
@@ -55,7 +58,6 @@ class AuthController {
             description = "IP Address",
             required = true
         ) request: HttpServletRequest) : ResponseEntity<JwtResponse> {
-        val fbsClient = FbsClient()
         val response = fbsClient.getLoginLdap(loginRequestPL.username!!, loginRequestPL.password!!, request)
         return if (response!!.statusCode() != 200) {
             if (response.statusCode() != 401)
@@ -85,7 +87,7 @@ class AuthController {
         val fbsTokenDecodingResult = JwtUtils.decodeFBSToken(tokenLoginPayload.jsessionid)
         val username = fbsTokenDecodingResult.username
 
-        checkUserData(username,"Bearer $tokenLoginPayload.jsessionid",request.remoteAddr)
+        checkUserData(username,"Bearer ${tokenLoginPayload.jsessionid}",request.remoteAddr)
 
 
         val authentication = authentificationManager.authenticate(
@@ -101,7 +103,6 @@ class AuthController {
     private fun checkUserData(username:String, authHeader: String?,xForewaredForHeader:String?):User{
         if (!userRepository.existsByUsername(username)) {
             val role = roleRepository.getReferenceById(ERole.ROLE_USER.ordinal.toLong())
-            val fbsClient = FbsClient()
             val fbsUser = fbsClient.getUserInformation(
                 authHeader,
                 xForewaredForHeader
